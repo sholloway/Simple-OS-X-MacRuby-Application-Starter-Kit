@@ -5,6 +5,6 @@ class TerminalSpeaker < Speaker
   end
   
   def speak
-    puts "I am an instance of a Ruby Speaker extending an Objective-C++ Speaker class"
+    return "I am an instance of a Ruby Speaker extending an Objective-C++ Speaker class"
   end
 end

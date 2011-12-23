@@ -17,8 +17,8 @@
 		[super dealloc];
 	}
 	
-	-(void)speak
+	-(NSString *)speak
 	{
-		NSLog(@"I am an instance of an Objective-C++ class");
+		return @"I am an instance of an Objective-C++ class";
 	}
 @end

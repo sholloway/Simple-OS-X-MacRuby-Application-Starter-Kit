@@ -5,7 +5,7 @@
 # reach the target will be created.	The target's extension, if different, is
 # given otherwise the same extension will be used.
 # Original Source: Dave Baldwin's Sketch MacRuby Sample
-def transformTask (taskSymbol, fl_or_srcGlob, targetDir, targetExt = nil, &block)
+def transform_task (taskSymbol, fl_or_srcGlob, targetDir, targetExt = nil, &block)
 	fileList = fl_or_srcGlob.kind_of?(FileList) ? fl_or_srcGlob : FileList[fl_or_srcGlob]
 	fileList.each do |src|
 		target = File.join(targetDir, src)

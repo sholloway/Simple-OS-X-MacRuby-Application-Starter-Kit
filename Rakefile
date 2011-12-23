@@ -9,6 +9,8 @@ High level defined Tasks:
   Done:
     create_terminal_app
     run_terminal_app
+    create_gui_app
+    run_gui_app
     
   Planned:  
     debugging helpers
@@ -17,10 +19,8 @@ High level defined Tasks:
       malloc_history
       vm_stat
       
-      debug_with_gdb
-      
-    create_gui_app
-    run_gui_app  
+      debug_with_gdb      
+     
     install_gui_app
     install_terminal_app  
     uninstall_gui_app
@@ -36,14 +36,16 @@ Help:
 #Application Meta-data
 GUI_NAME 		= 'SimpleOSXGUIRubyApp'
 TERM_NAME   = 'SimpleOSXTerminalRubyApp'
-APP_VERSION = '1.0'
+GUI_APP_VERSION = '1.0.0'
+GUI_BUILD_VERSION = '1'
 GUI_IDENTIFIER 	= "com.yourcompany.#{GUI_NAME}"
 TERM_IDENTIFIER = "com.yourcompany.#{TERM_NAME}"
 
 require 'build_scripts/utilities'
 require 'build_scripts/terminal_framework'
 require 'build_scripts/terminal_app'
-require 'build_scripts/gui_app.rb'
+require 'build_scripts/gui_framework'
+require 'build_scripts/gui_app'
 
 task :default => :create_terminal_app
 
@@ -77,4 +79,7 @@ task :default => :create_terminal_app
 
 require 'rake/clean'
 CLEAN.include('**/*.o','**/*.log')
-CLOBBER.include("#{TERM_NAME}.app","#{TERM_FRAMEWORK_NAME}.bundle")
+CLOBBER.include("#{TERM_NAME}.app",
+  "#{TERM_FRAMEWORK_NAME}.bundle", 
+  "#{GUI_NAME}.app",
+  "#{GUI_FRAMEWORK_NAME}.bundle")

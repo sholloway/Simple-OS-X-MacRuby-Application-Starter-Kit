@@ -1,6 +1,6 @@
 #load bundles
 puts "Load shared frameworks"
-frameworks_path = NSBundle.mainBundle.privateFrameworksPath.fileSystemRepresentation #this dir doesn't exist...
+frameworks_path = NSBundle.mainBundle.privateFrameworksPath.fileSystemRepresentation 
 puts "Found shared frameworks: #{frameworks_path}"
 Dir.glob(File.join(frameworks_path, '*.bundle')).map { |x| File.basename(x, File.extname(x)) }.uniq.each do |path|
   puts "Attempting to load shared framework #{File.join(frameworks_path,path)}"
@@ -19,5 +19,5 @@ Dir.glob(File.join(resources_path,'lib','*.{rb,rbo}')).map { |x| File.basename(x
   end
 end
 
-TerminalSpeaker.new.speak
-Speaker.new.speak
+puts TerminalSpeaker.new.speak
+puts Speaker.new.speak
