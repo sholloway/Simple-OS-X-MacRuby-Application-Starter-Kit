@@ -6,14 +6,27 @@ Functionality:
   - Install app into local usr/bin
   
 High level defined Tasks:
-  create_terminal_app
-  create_gui_app
-  run_gui_app
-  run_terminal_app
-  install_gui_app
-  install_terminal_app  
-  uninstall_gui_app
-  uninstall_terminal_app
+  Done:
+    create_terminal_app
+    run_terminal_app
+    
+  Planned:  
+    debugging helpers
+      leaks application
+      libgmalloc (Guard Malloc)
+      malloc_history
+      vm_stat
+      
+      debug_with_gdb
+      
+    create_gui_app
+    run_gui_app  
+    install_gui_app
+    install_terminal_app  
+    uninstall_gui_app
+    uninstall_terminal_app
+    compile_all_ruby
+    embed_mac_ruby
   
 Help:
   On the command line run: rake -T 
@@ -28,15 +41,11 @@ GUI_IDENTIFIER 	= "com.yourcompany.#{GUI_NAME}"
 TERM_IDENTIFIER = "com.yourcompany.#{TERM_NAME}"
 
 require 'build_scripts/utilities'
+require 'build_scripts/terminal_framework'
 require 'build_scripts/terminal_app'
+require 'build_scripts/gui_app.rb'
 
 task :default => :create_terminal_app
-
-#GUI Build Compiler settings 
-GUI_ARCH 		    = '-arch x86_64'
-GUI_FRAMEWORKS 	= '-framework MacRuby -framework Foundation -framework Cocoa'
-GUI_GCFLAGS     = '-fobjc-gc-only' 
-GUI_COMPILER    = 'clang' 
 
 #Application Structure
 #Compiled GUI Application Directory Structure
@@ -66,8 +75,6 @@ GUI_COMPILER    = 'clang'
 #     Frameworks
 #       all required frameworks
 
-desc 'Removes all created versions of your application'
-task :clean do
-  #remove the terminal application if it exists
-	rm_rf("#{TERM_NAME}.app")
-end
+require 'rake/clean'
+CLEAN.include('**/*.o','**/*.log')
+CLOBBER.include("#{TERM_NAME}.app","#{TERM_FRAMEWORK_NAME}.bundle")

@@ -1,5 +1,5 @@
 TERM_ARCH 		    = '-arch x86_64'
-TERM_FRAMEWORKS 	= '-framework MacRuby -framework Foundation'
+TERM_FRAMEWORKS 	= "-framework MacRuby -framework Foundation" #-framework #{TERM_FRAMEWORK_NAME}.bundle
 TERM_GCFLAGS      = '-fobjc-gc-only'
 TERM_COMPILER     = 'clang'
 
@@ -14,21 +14,23 @@ COPY_TERMINAL_FILES = FileList["lib/*.rb",
   "resources/images/*.icns", 
   "resources/*.strings",
 	"English.lproj/*.strings"]
+	
+COPY_TERMINAL_FRAMEWORKS = FileList["#{TERM_FRAMEWORK_NAME}.bundle"]
 
 transformTask(:copy_terminal_files, COPY_TERMINAL_FILES, TERM_RESOURCE_DIR) {|target, src| cp_r(src, target)}
+transformTask(:copy_terminal_frameworks, COPY_TERMINAL_FRAMEWORKS, TERM_FRAMEWORKS_DIR) {|target, src| cp_r(src, target)}
 
 # Create the Application Bundle and compile the main.m file
 # How should I get main.m?
 # This is called by create_terminal_app
-file File.join(TERM_MACOS_DIR, TERM_NAME) => [:copy_terminal_files] do |t|
-	mkdir_p("#{TERM_MACOS_DIR}", :verbose => false)
-	puts "It's my intent to just compile main.m, but this might try to compile the ruby files..."
-	puts "Attempting to compile #{t.name}"
+file File.join(TERM_MACOS_DIR, TERM_NAME) => [:copy_terminal_files, :copy_terminal_frameworks] do |t|
+	mkdir_p("#{TERM_MACOS_DIR}", :verbose => false)	
 	sh "#{TERM_COMPILER} #{TERM_MAIN} -L#{TERM_FRAMEWORKS_DIR} -o #{t.name} #{TERM_ARCH} #{TERM_FRAMEWORKS} #{TERM_GCFLAGS}"
 end
 
 desc "Creates a terminal application with an application bundle."
-task :create_terminal_app => [File.join(TERM_MACOS_DIR, TERM_NAME),:copy_terminal_files] 
+task :create_terminal_app => [:create_terminal_framework,
+    File.join(TERM_MACOS_DIR, TERM_NAME)]
 
 desc "Run the terminal application that is locally built"
 task :run_terminal_app do
